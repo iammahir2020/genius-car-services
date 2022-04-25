@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const Expert = ({ expert }) => {
   const { name, img } = expert;
+  useEffect(() => {
+    AOS.init({ duration: 2000 });
+  }, []);
   return (
-    <div className=" g-5 col-sm-12 col-smd-6 col-lg-4">
+    <div data-aos="slide-up" className=" g-5 col-sm-12 col-smd-6 col-lg-4">
       <div className="card" style={{ width: "18rem" }}>
         <img src={img} className="card-img-top" alt="..." />
         <div className="card-body">

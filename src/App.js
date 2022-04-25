@@ -12,10 +12,18 @@ import RequireAuth from "./Pages/Login/RequireAuth/RequireAuth";
 import CheckOut from "./Pages/CheckOut/CheckOut";
 import AddService from "./Pages/Home/AddService/AddService";
 import ManageServices from "./Pages/ManageServices/ManageServices";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { useEffect } from "react";
+import { ToastContainer } from "react-toastify";
+import Order from "./Pages/Order/Order";
 
 function App() {
+  useEffect(() => {
+    AOS.init({ duration: 2000 });
+  }, []);
   return (
-    <div>
+    <div data-aos="fade-in">
       <Header></Header>
       <div className="container">
         <Routes>
@@ -26,7 +34,7 @@ function App() {
             element={<ServiceDetailPage></ServiceDetailPage>}
           ></Route>
           <Route
-            path="/checkout"
+            path="/checkout/:serviceId"
             element={
               <RequireAuth>
                 <CheckOut></CheckOut>
@@ -49,6 +57,14 @@ function App() {
               </RequireAuth>
             }
           ></Route>
+          <Route
+            path="/orders"
+            element={
+              <RequireAuth>
+                <Order></Order>
+              </RequireAuth>
+            }
+          ></Route>
           <Route path="/about" element={<About></About>}></Route>
           <Route path="/login" element={<Login></Login>}></Route>
           <Route path="/register" element={<Register></Register>}></Route>
@@ -56,6 +72,7 @@ function App() {
         </Routes>
       </div>
       <Footer></Footer>
+      <ToastContainer />
     </div>
   );
 }

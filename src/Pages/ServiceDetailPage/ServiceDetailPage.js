@@ -1,28 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
+import useServiceDetail from "../../hooks/useServiceDetail";
 
 const ServiceDetailPage = () => {
   const navigate = useNavigate();
   const { serviceId } = useParams();
 
-  const [service, setService] = useState({});
+  const [service] = useServiceDetail(serviceId);
 
-  useEffect(() => {
-    const url = `http://localhost:5000/service/${serviceId}`;
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => setService(data));
-  }, []);
-
-  const goTocheckOut = () => {
-    navigate("/checkout");
+  const goTocheckOut = (serviceId) => {
+    navigate(`/checkout/${serviceId}`);
   };
   return (
     <div>
       <div className="text-center">
         <h2>You are about to book: {service.name}</h2>
-        <Button variant="primary" onClick={goTocheckOut}>
+        <Button variant="primary" onClick={() => goTocheckOut(serviceId)}>
           GO TO CHECKOUT
         </Button>
       </div>

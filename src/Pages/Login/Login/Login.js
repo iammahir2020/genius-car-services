@@ -7,9 +7,10 @@ import {
 } from "react-firebase-hooks/auth";
 import auth from "../../../firebase.init";
 import SocialLogin from "../SocialLogin/SocialLogin";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PageTitle from "../../Shared/PageTitle/PageTitle";
+import axios from "axios";
 
 const Login = () => {
   const emailRef = useRef("");
@@ -34,7 +35,7 @@ const Login = () => {
   const from = location.state?.from?.pathname || "/";
 
   if (user) {
-    navigate(from, { replace: true });
+    // navigate(from, { replace: true });
   }
 
   const resetPassword = async () => {
@@ -47,14 +48,18 @@ const Login = () => {
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
 
-    signInWithEmailAndPassword(email, password).then(() => {
-      console.log("logged in");
-    });
+    await signInWithEmailAndPassword(email, password);
+    const { data } = await axios.post(
+      "https://evening-peak-08998.herokuapp.com/login",
+      { email }
+    );
+    localStorage.setItem("accessToken", data.accessToken);
+    navigate(from, { replace: true });
   };
 
   return (
@@ -102,7 +107,6 @@ const Login = () => {
       </p>
 
       <SocialLogin></SocialLogin>
-      <ToastContainer />
     </div>
   );
 };
